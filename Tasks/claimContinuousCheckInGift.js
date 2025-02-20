@@ -23,12 +23,12 @@ function checkAndClaimGift(mode, maxAttempts, delayScale) {
         // 加入重试一次的机制
         if (textMatches(/看视频领限时福利.*/)) {
             keyEventExR('back');
-            if (!findAndClick('福利中心',null,maxAttempts,delayScale,2)){
+            if (!findAndClick(null,'福利中心',null,maxAttempts,delayScale,2)){
                 console.error('出错了，请清除后台后重试');
                 return false;
             };
         }else{
-            console.error("加载福利中心页面超时，请调整延迟/重试次数再重试，或直接清除后台重试");
+            console.error("加载福利中心页面超时，请调整延迟/n重试次数再重试，或直接清除后台重试");
             return false;
         }
 

@@ -202,62 +202,6 @@ if (!enterWelfareCenterByMe()) {
 }
 
 
-// 查看当前是否是周日
-// 直接进入福利中心的检查是否周日是否需要兑换章节卡
-function exchangeFragmentIfIsSunday() {
-    if (!WaitForPageLoadR(FLZX_TARGET_TEXTS, MAX_ATTEMPTS, DELAY_SCALE, true)) {
-        // 有时候会出现进了福利中心页，但是下半部分的控件都是获取不到，只获取到上半部分
-        // 加入重试一次的机制
-        if (textMatches(/看视频领限时福利.*/)) {
-            KeyEventEx('back');
-            sleep(500 * ConfigR.DelayScale);
-            if (!FindAndClick('福利中心', null, maxAttempts, delayScale, 2)) {
-                console.error('出错了，请清除后台后重试');
-                return false;
-            };
-        } else {
-            console.error("加载福利中心页面超时，请调整延迟/重试次数再重试，或直接清除后台重试");
-            engines.stopAll();
-            sleep(1000 * DELAY_SCALE); 
-            return false;
-        }
-
-    };
-    let isSunday = false;
-    let sundayBtn = selector().textMatches(/积攒碎片兑章节卡.*/).findOne(2000);
-    if (!sundayBtn) {
-        console.info("找不到周日兑章节卡的地方，可能是已经签过到被折叠，或者起点有更新");
-        return false;
-    }
-    if (sundayBtn
-        .parent().parent()
-        .parent().parent()
-        .child(5).child(1)
-        .child(0).text() === '已签') isSunday = true;
-    if (isSunday && EXCHANGE_FRAGMENT) {
-        sundayBtn.parent().parent().parent().click();
-        if (!exchangeFragment()) {  // 进入兑换章节卡流程
-            // 需要过人机验证，暂不实现
-            console.error('兑换章节卡出错，请保留报错信息');
-            console.error('现在将重启起点app进入福利中心继续任务');
-            restartQidianAndEnterWelfarecenter();
-        };
-        return true;
-    }
-    console.log('当前不是周日或者配置不进行章节卡兑换');
-    return false;
-}
-
-function restartQidianAndEnterWelfarecenter() {
-    restartQidian();
-    if (!enterWelfareCenterByMe()) {
-        console.error('进入福利中心失败，脚本将退出，请清除后台后重试');
-        engines.stopAll();
-        sleep(1000 * DELAY_SCALE);
-    }
-}
-
-
 // 进入福利中心后，执行不同的任务
 
 // 1. 连签礼包
@@ -267,10 +211,11 @@ function claimContinuousCheckInGift() {
     const ClaimContinuousCheckInGift = require("./Tasks/claimContinuousCheckInGift");
     ClaimContinuousCheckInGift(CLAIM_MODE, MAX_ATTEMPTS, DELAY_SCALE);
     if (!CLAIM_MODE) KeyEventEx("back"); // 返回福利中心主页
-}
+};
+
 if (TASK_CONSIFG.claimContinuousCheckInGift) {
     claimContinuousCheckInGift();
-}
+};
 
 // 2. 看视频得奖励，直接干所有看视频的奖励，所以如果有需要可以定时运行脚本领取每小时的奖励
 function videoMissions() {
@@ -293,7 +238,8 @@ function videoMissions() {
         // 太快有可能看视频的按钮还没被刷新为已领取就再次被点击，稍微的等一下
         sleep(500 * DELAY_SCALE);
     }
-}
+};
+
 videoMissions();
 
 // 3. 周日兑换章节卡
@@ -621,3 +567,58 @@ function exchangeFragment() {
 }
 
 
+
+// 查看当前是否是周日
+// 直接进入福利中心的检查是否周日是否需要兑换章节卡
+function exchangeFragmentIfIsSunday() {
+    if (!WaitForPageLoadR(FLZX_TARGET_TEXTS, MAX_ATTEMPTS, DELAY_SCALE, true)) {
+        // 有时候会出现进了福利中心页，但是下半部分的控件都是获取不到，只获取到上半部分
+        // 加入重试一次的机制
+        if (textMatches(/看视频领限时福利.*/)) {
+            KeyEventEx('back');
+            sleep(500 * ConfigR.DelayScale);
+            if (!FindAndClick('福利中心', null, MAX_ATTEMPTS, DELAY_SCALE, 2)) {
+                console.error('出错了，请清除后台后重试');
+                return false;
+            };
+        } else {
+            console.error("加载福利中心页面超时，请调整延迟/重试次数再重试，或直接清除后台重试");
+            engines.stopAll();
+            sleep(1000 * DELAY_SCALE); 
+            return false;
+        }
+
+    };
+    let isSunday = false;
+    let sundayBtn = selector().textMatches(/积攒碎片兑章节卡.*/).findOne(2000);
+    if (!sundayBtn) {
+        console.info("找不到周日兑章节卡的地方，可能是已经签过到被折叠，或者起点有更新");
+        return false;
+    }
+    if (sundayBtn
+        .parent().parent()
+        .parent().parent()
+        .child(5).child(1)
+        .child(0).text() === '已签') isSunday = true;
+    if (isSunday && EXCHANGE_FRAGMENT) {
+        sundayBtn.parent().parent().parent().click();
+        if (!exchangeFragment()) {  // 进入兑换章节卡流程
+            // 需要过人机验证，暂不实现
+            console.error('兑换章节卡出错，请保留报错信息');
+            console.error('现在将重启起点app进入福利中心继续任务');
+            restartQidianAndEnterWelfarecenter();
+        };
+        return true;
+    }
+    console.log('当前不是周日或者配置不进行章节卡兑换');
+    return false;
+}
+
+function restartQidianAndEnterWelfarecenter() {
+    restartQidian();
+    if (!enterWelfareCenterByMe()) {
+        console.error('进入福利中心失败，脚本将退出，请清除后台后重试');
+        engines.stopAll();
+        sleep(1000 * DELAY_SCALE);
+    }
+}
