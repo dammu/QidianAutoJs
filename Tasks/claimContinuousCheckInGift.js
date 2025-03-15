@@ -23,7 +23,7 @@ function checkAndClaimGift(mode, maxAttempts, delayScale) {
         // 加入重试一次的机制
         if (textMatches(/看视频领限时福利.*/)) {
             keyEventExR('back');
-            if (!findAndClick(null,'福利中心',null,maxAttempts,delayScale,2)){
+            if (!findAndClick(null,'福利中心',maxAttempts,delayScale,2)){
                 console.error('出错了，请清除后台后重试');
                 return false;
             };

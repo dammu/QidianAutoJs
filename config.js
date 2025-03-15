@@ -9,7 +9,7 @@ const config = {
   UseShizukuKillApp: true,     // 是否使用 shizuku 来结束app
   ShizukuClick: true,          // 是否使用 shizuku 来点击控件坐标
   ShizukuKeyEvent: false,      // 是否使用 shizuku 来发送按键事件
-  ExchangeFragment: false,      // 是否需要兑换章节卡（如果是周日）需要过人机验证，暂不实现
+  ExchangeFragment: false,      // 是否需要兑换章节卡（如果是周日），有时候会触发人机验证，不实现自动人机验证
   claimContinuousCheckInGiftByCheckedInDays: true,
   // 是否根据已连续签到天数来决定需不需要领取连签礼包，如果否就会不管连续签到几天都打开连签礼包页面尝试领取
   // 所以如果使用true的时候没运行脚本错过了当天的领取，第二天也不会再去领直到连签天数达到下一等级
