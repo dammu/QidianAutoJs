@@ -6,6 +6,9 @@
 
 建议配合 [Shizuku](https://shizuku.rikka.app/zh-hans/) 使用
 
-在 `config.js` 中配置设置项，以后可能会加上图形化设置，代码简陋全靠AI
+在 `config.js` 中配置设置项
+
+
+`config.js`中的配置说明见注释
 
 ends
